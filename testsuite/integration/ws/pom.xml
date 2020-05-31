@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Set these VM properties in your IDE debugger
+
+  -Djava.util.logging.manager=org.jboss.logmanager.LogManager
+  -Djboss.home=${workspace_loc:jboss-as-build}/target/jboss-as-8.0.0.Alpha4-SNAPSHOT
+  -DallowConnectingToRunningServer=true
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.wildfly</groupId>
+        <artifactId>wildfly-ts-integ</artifactId>
+        <!--
+        Maintain separation between the artifact id and the version to help prevent
+        merge conflicts between commits changing the GA and those changing the V.
+        -->
+        <version>20.0.0.Final-SNAPSHOT</version>
+    </parent>
+
+    <!-- ********************************************************************************** -->
+    <!-- ******************************** WS Integration ********************************** -->
+    <!-- ********************************************************************************** -->
+    <artifactId>wildfly-ts-integ-ws</artifactId>
+
+    <name>WildFly Test Suite: Integration - WS</name>
+
+    <properties>
+        <jbossas.ts.integ.dir>${basedir}/..</jbossas.ts.integ.dir>
+    </properties>
+
+    <dependencies>
+        <!-- These seem to be required first so that jbossws-cxf-client ends up on the class path first -->
+        <dependency>
+            <groupId>org.jboss.ws.cxf</groupId>
+            <artifactId>jbossws-cxf-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-ws-rm</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- While provided by the server the seem to be required for tests annotated with @WrapThreadContextClassLoader -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-databinding-jaxb</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxws</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-simple</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-security</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-security-saml</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-ws-mex</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ws.xmlschema</groupId>
+            <artifactId>xmlschema-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wss4j</groupId>
+            <artifactId>wss4j-bindings</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wss4j</groupId>
+            <artifactId>wss4j-ws-security-stax</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wss4j</groupId>
+            <artifactId>wss4j-ws-security-policy-stax</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- End @WrapThreadContextClassLoader -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-ws-security</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf.services.sts</groupId>
+            <artifactId>cxf-services-sts-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wss4j</groupId>
+            <artifactId>wss4j-ws-security-common</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wss4j</groupId>
+            <artifactId>wss4j-ws-security-dom</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Required for Java 11 (maybe 10 too) -->
+        <dependency>
+            <groupId>com.sun.activation</groupId>
+            <artifactId>jakarta.activation</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss</groupId>
+            <artifactId>jboss-ejb-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.ejb3</groupId>
+            <artifactId>jboss-ejb3-ext-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.staxex</groupId>
+            <artifactId>stax-ex</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.picketlink</groupId>
+            <artifactId>picketlink-federation</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.picketlink.distribution</groupId>
+            <artifactId>picketlink-wildfly8</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+
+        <profile>
+            <id>ws.integration.tests.profile</id>
+            <activation>
+                <property>
+                    <name>!no.ws.integration.tests</name>
+                </property>
+            </activation>
+
+            <!--
+                Server configuration executions.
+            -->
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <executions>
+                            <execution>
+                                <id>generate-ws-stores</id>
+                                <phase>test-compile</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>org.jboss.as.test.integration.ws.wsse.GenerateWSKeyStores</mainClass>
+                                    <classpathScope>test</classpathScope>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>generate-sign-encrypt-files</id>
+                                <phase>test-compile</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>org.jboss.as.test.integration.ws.wsse.GenerateSignEncryptFiles</mainClass>
+                                    <classpathScope>test</classpathScope>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>generate-jks-properties-files</id>
+                                <phase>test-compile</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>org.jboss.as.test.integration.ws.wsse.GenerateJKSAndPropertiesFiles</mainClass>
+                                    <classpathScope>test</classpathScope>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>generate-sts_keystore-file</id>
+                                <phase>test-compile</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>org.jboss.as.test.integration.ws.authentication.policy.GenerateSTSKeystore</mainClass>
+                                    <classpathScope>test</classpathScope>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <runOrder>alphabetical</runOrder>
+                        </configuration>
+                        <executions combine.children="append">
+
+                            <!-- Disable default-test execution. -->
+                            <execution>
+                                <id>default-test</id>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <phase>none</phase>
+                            </execution>
+
+                            <execution>
+                                <id>ws-integration-default.surefire</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <environmentVariables>
+                                        <JBOSS_HOME>${jboss.dist}</JBOSS_HOME>
+                                    </environmentVariables>
+
+                                    <!-- Parameters to test cases. -->
+                                    <systemPropertyVariables combine.children="append">
+                                        <jboss.server.config.file.name>standalone.xml</jboss.server.config.file.name>
+                                        <!-- EJB client library hack, see WFLY-4973-->
+                                        <org.jboss.ejb.client.wildfly-testsuite-hack>true</org.jboss.ejb.client.wildfly-testsuite-hack>
+
+                                        <!-- SSL settings -->
+                                        <cxf.tls-client.disableCNCheck>true</cxf.tls-client.disableCNCheck>
+                                        <javax.net.ssl.trustStore>${project.build.testOutputDirectory}/org/jboss/as/test/integration/ws/wsse/trust/test.truststore</javax.net.ssl.trustStore>
+                                        <javax.net.ssl.trustStorePassword>changeit</javax.net.ssl.trustStorePassword>
+                                        <javax.net.ssl.trustStoreType>jks</javax.net.ssl.trustStoreType>
+                                        <javax.net.ssl.keyStore>${project.build.testOutputDirectory}/org/jboss/as/test/integration/ws/wsse/trust/client.keystore</javax.net.ssl.keyStore>
+                                        <javax.net.ssl.keyStorePassword>changeit</javax.net.ssl.keyStorePassword>
+                                        <javax.net.ssl.keyStoreType>jks</javax.net.ssl.keyStoreType>
+                                    </systemPropertyVariables>
+
+                                    <additionalClasspathElements>
+                                        <additionalClasspathElement>${project.basedir}/../src/test/resources</additionalClasspathElement>
+                                    </additionalClasspathElements>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>
