@@ -1,5 +1,5 @@
-WildFly Application Server
-========================
+A Snapshot of Wildfly Application Server
+========================================
 https://wildfly.org
 
 * Fast Startup
